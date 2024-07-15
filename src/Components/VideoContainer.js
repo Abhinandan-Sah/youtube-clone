@@ -19,7 +19,7 @@ const VideoContainer = () => {
     const json = await data.json();
     // console.log(json);
     setVideos(json.items);
-    console.log(json.items)
+    // console.log(json.items)
   }
 
   if(videos===null){ return (<h1>Loading...</h1>)};

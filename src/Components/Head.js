@@ -1,8 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { toggleMenu } from '../utils/appSlice';
+import { YOUTUBE_SEARCH_API } from '../utils/constants';
 
 export const Head = () => {
+  
+  const [searchQuery, setSearchQuery] = useState("");
+  console.log(searchQuery)
+  useEffect(()=>{
+    //API Call
+    const timer= setTimeout(()=>{
+      getSearchSuggestions();
+    }, 200);
+    
+    return() =>{
+       clearInterval(timer);
+    }
+
+    // make an API call after ever key press 
+    // but if the difference between 2 API calls is <200ms
+    // decline the API call
+
+  },[searchQuery]);
+
+  const getSearchSuggestions = async () => {
+    const data = await fetch(YOUTUBE_SEARCH_API+searchQuery);
+    const json = await data.json();
+    console.log(json);
+  }
+
   const dispatch = useDispatch();
   const toggleMenuHandler = () =>{
     dispatch(toggleMenu());
@@ -33,8 +59,18 @@ export const Head = () => {
 </svg></a>
       </div>
       <div className='w-8/12 '>
-        <input className= 'w-4/5 p-1 border border-black rounded-l-full' name='text' />
+        <input className= 'w-4/5 p-1 border border-black rounded-l-full' value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}} name='text' />
         <button className='p-1 border border-black rounded-r-full'>🔍</button>
+        <div className='fixed bg-white py-2 px-5 xl:w-[19rem]'>
+          <ul>
+            
+            <li>Iphone</li>
+            <li>Iphone pro</li>
+            <li>Iphone pro</li>
+            <li>Iphone pro</li>
+            <li>Iphone pro</li>
+          </ul>
+        </div>
       </div>
       <div className='w-1/12  ml-auto '>
         <img className='h-10 w-full ' alt='user-icon' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmXysOIBN-iJZ71PxpFuKwOxvH9ZPietXw8pW5FpuCaQI4Y1OtXISofDfJbKmotwYueEA&usqp=CAU' />
