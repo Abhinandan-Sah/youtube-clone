@@ -6,7 +6,9 @@ import { YOUTUBE_SEARCH_API } from '../utils/constants';
 export const Head = () => {
   
   const [searchQuery, setSearchQuery] = useState("");
-  console.log(searchQuery)
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState();
+  // console.log(searchQuery)
   useEffect(()=>{
     //API Call
     const timer= setTimeout(()=>{
@@ -26,7 +28,8 @@ export const Head = () => {
   const getSearchSuggestions = async () => {
     const data = await fetch(YOUTUBE_SEARCH_API+searchQuery);
     const json = await data.json();
-    console.log(json);
+    // console.log(json[1]);
+    setSuggestions(json[1]);
   }
 
   const dispatch = useDispatch();
@@ -35,10 +38,10 @@ export const Head = () => {
   }
   return (
     <div className='grid grid-flow-col px-4 py-4 shadow-lg sticky top-0 z-50  bg-white'>
-      <div className='w-3/12  flex gap-2'>
+      <div className='col-span-1  flex gap-2'>
       <img className='h-10 cursor-pointer' onClick={()=> toggleMenuHandler()} alt='youtube-hamburder' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAb1BMVEX///8iICGSkZIkHyEPDA3z8vIyMTEhGx40MDEeHB4jICEeHR4AAAAxMTEgHh4gHB3W1tYtKyyXlpe6uroKBQhzcnJ+fX7CwsKysrJmZWX19fXk5OQYFhc5ODgoJidta2xUVFRfXV7Kysqsq6yjo6MHDa+eAAAB8UlEQVR4nO3c3VLaQBgGYJY/IQtE1Iogrfbn/q+xCaQ2TqtFm222+jwHDC8MMO8EdjnY+QYDAAAAAAAAAAAAAAAAeI/OL4Z5uDhP0m+yXYwzcbX4cJug4d045GN8Pem84GYd+67VUq6/dN7wou9Sjy1u0jQcjUZ9V2skaHhZfUuLbBrGYtN5w8F2HLNpGFOsNIPddlo3XGUgTK9T7BbVFzWbHX+zS1IQAAAAAAAAAABeZJKHVPXO76dHs9msul1OH+JfpOmr0ufuz15Wbhb78uzBvJzPWym2U/XU6Sk+lc6eTnEfv3Zf8PZjeTib2AihnYpwOJl5Qhp1kULY33d/1Pvbp9XTDcO/bhjGl503HD5uUX/Mn1PxTPr964pTUkhygra+hj9U16V10LS6+/pUtFLxTAo/00GCa1j/DhtFDw2Lxw1T/A7rtTRWS+ZhES2rdS3O22lep/qBX1LZSmetFI+pfvzk1HximrW03g9ns4edadboIy2XafbDWt9/Zhqp6gEAAAAAAAAAwAu89Zl7u+00xFXse2ZiLdHcxO24PLx7DpLMvrxcHy9f3+WOUswvHYZVRg2TTNktqnqjTCa0Jmm4WZcZNUwxC3pwd5VPwyLJlN3JdnHV9zD2RqKZ7G9/rj4AAAAAAAAAAAAAAAD8T74DVhZG6MsBqOQAAAAASUVORK5CYII=' />
       {/* <a href='/' className='w-36'><img className='h-10 w-full cursor-pointer object-cover' alt='youtube-logo' src='https://cdn.mos.cms.futurecdn.net/8gzcr6RpGStvZFA2qRt4v6.jpg' /></a> */}
-      <a href='/' className='w-36'><svg xmlns="http://www.w3.org/2000/svg" id="yt-logo-updated-svg_yt1"  viewBox="0 0 90 20" focusable="false" className="cursor-pointer inherit w-[100%] h-[100%]">
+      <a href='/' className='w-28'><svg xmlns="http://www.w3.org/2000/svg" id="yt-logo-updated-svg_yt1"  viewBox="0 0 90 20" focusable="false" className="cursor-pointer inherit w-[100%] h-[100%]">
   <svg id="yt-logo-updated_yt1" viewBox="0 0 90 20" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
     <g>
       <path d="M27.9727 3.12324C27.6435 1.89323 26.6768 0.926623 25.4468 0.597366C23.2197 2.24288e-07 14.285 0 14.285 0C14.285 0 5.35042 2.24288e-07 3.12323 0.597366C1.89323 0.926623 0.926623 1.89323 0.597366 3.12324C2.24288e-07 5.35042 0 10 0 10C0 10 2.24288e-07 14.6496 0.597366 16.8768C0.926623 18.1068 1.89323 19.0734 3.12323 19.4026C5.35042 20 14.285 20 14.285 20C14.285 20 23.2197 20 25.4468 19.4026C26.6768 19.0734 27.6435 18.1068 27.9727 16.8768C28.5701 14.6496 28.5701 10 28.5701 10C28.5701 10 28.5677 5.35042 27.9727 3.12324Z" fill="#FF0000"></path>
@@ -58,21 +61,19 @@ export const Head = () => {
   </svg>
 </svg></a>
       </div>
-      <div className='w-8/12 '>
-        <input className= 'w-4/5 p-1 border border-black rounded-l-full' value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}} name='text' />
-        <button className='p-1 border border-black rounded-r-full'>🔍</button>
-        <div className='fixed bg-white py-2 px-5 xl:w-[19rem]'>
+      <div className='col-span-10 px-10 xl:mx-36'>
+        <div className=''>
+        <input className= 'w-1/2  p-2 px-5 border border-black rounded-l-full' value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}} name='text' onFocus={()=> setShowSuggestions(true)} onBlur={()=>setShowSuggestions(false)} />
+        <button className='px-5 py-2 border border-black rounded-r-full'>🔍</button>
+        </div>
+        <div className='fixed bg-white py-2 px-5 w-[28%] shadow-lg rounded-lg border-gray-100'>
           <ul>
-            
-            <li>Iphone</li>
-            <li>Iphone pro</li>
-            <li>Iphone pro</li>
-            <li>Iphone pro</li>
-            <li>Iphone pro</li>
+            { showSuggestions && suggestions.map(s=><li key={s} className='py-1 shadow-sm hover:bg-gray-100'>🔍 {s}</li>
+            )} 
           </ul>
         </div>
       </div>
-      <div className='w-1/12  ml-auto '>
+      <div className='col-span-1  ml-auto '>
         <img className='h-10 w-full ' alt='user-icon' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmXysOIBN-iJZ71PxpFuKwOxvH9ZPietXw8pW5FpuCaQI4Y1OtXISofDfJbKmotwYueEA&usqp=CAU' />
       </div>
     </div>
