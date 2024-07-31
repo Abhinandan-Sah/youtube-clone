@@ -9,6 +9,7 @@ export const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState();
+  const [showSearch, setShowSearch] = useState("");
   // console.log(searchQuery)
 
   const searchCache = useSelector((store) => store.search);
@@ -35,6 +36,10 @@ export const Head = () => {
     // decline the API call
 
   },[searchQuery]);
+
+  const handleSearchClick = ((s) => {
+    console.log(s)
+  });
 
   const getSearchSuggestions = async () => {
     const data = await fetch(YOUTUBE_SEARCH_API+searchQuery);
@@ -85,7 +90,7 @@ export const Head = () => {
         </div>
         <div className='fixed bg-white py-2 px-5 w-[28%] shadow-lg rounded-lg border-gray-100'>
           <ul>
-            { showSuggestions && suggestions.map(s=><li key={s} className='py-1 shadow-sm hover:bg-gray-100'>🔍 {s}</li>
+            { showSuggestions && suggestions.map(s=><li key={s} onClick={()=>handleSearchClick(s)} className='py-1 shadow-sm hover:bg-gray-100 cursor'>🔍 {s}</li>
             )} 
           </ul>
         </div>
