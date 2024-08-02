@@ -17,7 +17,7 @@ const VideoContainer = () => {
   const getVideos = async()=>{
      const data = await fetch(YOUTUBE_VIDEO_API);
     const json = await data.json();
-    // console.log(json);
+    console.log(json);
     setVideos(json.items);
     // console.log(json.items)
   }
@@ -26,7 +26,7 @@ const VideoContainer = () => {
 
 
   return (
-    <div className='flex flex-wrap'>
+    <div className='flex flex-wrap justify-center'>
       {videos.map((video) => 
        <Link key={video.id} to={"/watch?v="+video.id}> <VideoCard key={video.id} videoInfo={video}/></Link>
       )};

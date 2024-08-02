@@ -2,19 +2,23 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleMenu } from '../utils/appSlice';
 import { YOUTUBE_SEARCH_API } from '../utils/constants';
-import { cacheResults } from '../utils/searchSlice';
+import { addSearchQuery, cacheResults } from '../utils/searchSlice';
+import SearchSuggestion from './SearchResults';
+import SearchResults from './SearchResults';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const Head = () => {
   
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState();
-  const [showSearch, setShowSearch] = useState("");
+  const [searchClick, setSearchClick] = useState("");
   // console.log(searchQuery)
 
   const searchCache = useSelector((store) => store.search);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(()=>{
     //API Call
@@ -37,9 +41,6 @@ export const Head = () => {
 
   },[searchQuery]);
 
-  const handleSearchClick = ((s) => {
-    console.log(s)
-  });
 
   const getSearchSuggestions = async () => {
     const data = await fetch(YOUTUBE_SEARCH_API+searchQuery);
@@ -53,6 +54,12 @@ export const Head = () => {
         [searchQuery]: json[1]
       })
     )
+  }
+
+  const handleSearchClick = (s)=>{
+    setSearchQuery(s); 
+    dispatch(addSearchQuery(s));
+    navigate("/results")
   }
 
   const toggleMenuHandler = () =>{
@@ -84,13 +91,13 @@ export const Head = () => {
 </svg></a>
       </div>
       <div className='col-span-10 px-10 xl:mx-36'>
-        <div className=''>
+        <form className='' onSubmit={(e)=>{e.preventDefault(); handleSearchClick(searchQuery)}}>
         <input className= 'w-1/2  p-2 px-5 border border-black rounded-l-full' value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}} name='text' onFocus={()=> setShowSuggestions(true)} onBlur={()=>setShowSuggestions(false)} />
-        <button className='px-5 py-2 border border-black rounded-r-full'>🔍</button>
-        </div>
+        <button className='px-5 py-2 border border-black rounded-r-full' type='submit'>🔍</button>
+        </form>
         <div className='fixed bg-white py-2 px-5 w-[28%] shadow-lg rounded-lg border-gray-100'>
           <ul>
-            { showSuggestions && suggestions.map(s=><li key={s} onClick={()=>handleSearchClick(s)} className='py-1 shadow-sm hover:bg-gray-100 cursor'>🔍 {s}</li>
+            { showSuggestions && suggestions.map(s=><li key={s} onMouseDown={()=>handleSearchClick(s)} className='py-1 shadow-sm hover:bg-gray-100 cursor'>🔍 {s}</li>
             )} 
           </ul>
         </div>
