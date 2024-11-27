@@ -15,12 +15,11 @@ const SearchResults = () => {
 
   useEffect(()=>{
     fetchData();
-  },[searchQuery]);
+  },[]);
 
   const fetchData = async ()=>{
     const data = await fetch(YOUTUBE_SEARCH_SUGGESTION_API+searchQuery+"&type=video&maxResults=40");
     const json = await data.json();
-    console.log(json)
     setVideos(json?.items);
   }
   if(videos===null) return (<div className='text-center text-3xl'>Loading...</div>)
